@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import Home from './pages/Home'
+import { Container } from 'semantic-ui-react'
 import {
   BrowserRouter as Router,
   Route,
@@ -9,9 +10,11 @@ import {
 class App extends Component {
   render() {
     return (
-      <Router>
-        <Route exact path="/" component={Home}/>
-      </Router>
+      <Container>
+        <Router>
+          <Route exact path="/" component={Home} />
+        </Router>
+      </Container>
     )
   }
 }
