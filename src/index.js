@@ -15,7 +15,7 @@ import { InMemoryCache } from 'apollo-cache-inmemory'
 const client = new ApolloClient({
   // By default, this client will send queries to the
   //  `/graphql` endpoint on the same host
-  link: new HttpLink({ uri: 'https://api.graph.cool/simple/v1/cjc3nzjco1x9p0187mlbzo1tf' }),
+  link: new HttpLink({ uri: 'https://api.graph.cool/simple/v1/cjcb20rsq0b0c01752u49gf4b' }),
   cache: new InMemoryCache()
 });
 

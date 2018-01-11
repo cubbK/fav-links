@@ -1,0 +1,3 @@
+targets:
+  favLinks: shared-eu-west-1/cjcb20rsq0b0c01752u49gf4b
+  default: favLinks
