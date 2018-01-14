@@ -1,5 +1,7 @@
 import React, { Component } from 'react'
 import Home from './pages/Home'
+import Signup from './pages/Signup'
+import Login from './pages/Login'
 import { Container } from 'semantic-ui-react'
 import {
   BrowserRouter as Router,
@@ -12,7 +14,11 @@ class App extends Component {
     return (
       <Container>
         <Router>
-          <Route exact path="/" component={Home} />
+          <div>
+            <Route exact path='/' component={Home} />
+            <Route exact path='/login' component={Login} />
+            <Route exact path='/signup' component={Signup} />
+          </div>
         </Router>
       </Container>
     )
