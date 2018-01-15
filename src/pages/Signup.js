@@ -5,6 +5,7 @@ import gql from 'graphql-tag'
 import CardCenter from 'components/CardCenter'
 import ContainerFluid from 'components/ContainerFluid'
 import { Button, Checkbox, Form } from 'semantic-ui-react'
+import { Field, reduxForm } from 'redux-form'
 import styles from './Signup.module.styl'
 
 const SIGNUP_USER_MUTATION = gql`
@@ -15,6 +16,11 @@ const SIGNUP_USER_MUTATION = gql`
     }
   }
 `
+
+@reduxForm({
+  // a unique name for the form
+  form: 'signup'
+})
 @graphql(SIGNUP_USER_MUTATION, { name: 'signupUser' })
 class Signup extends Component {
 
