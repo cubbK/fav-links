@@ -1,15 +1,15 @@
 import React, { Component } from 'react'
 import { Card } from 'semantic-ui-react'
-import styles from './FormCenter.module.styl'
+import styles from './CardCenter.module.styl'
 
-const FormCenter = props =>
+const CardCenter = props =>
   <Card centered raised className={ styles.card }>
     <Card.Content>
       <Card.Header>
-        {props.header}
+        { props.header }
       </Card.Header>
-      {props.children}
+      { props.children }
     </Card.Content>
   </Card>
 
-export default FormCenter
+export default CardCenter
