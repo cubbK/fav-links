@@ -4,8 +4,9 @@ import gql from 'graphql-tag'
 
 import CardCenter from 'components/CardCenter'
 import ContainerFluid from 'components/ContainerFluid'
-import { Button, Checkbox, Form } from 'semantic-ui-react'
-import { Field, reduxForm } from 'redux-form'
+import { Button, Label } from 'semantic-ui-react'
+import { Form, Input } from 'formsy-semantic-ui-react'
+
 import styles from './Signup.module.styl'
 
 const SIGNUP_USER_MUTATION = gql`
@@ -17,10 +18,6 @@ const SIGNUP_USER_MUTATION = gql`
   }
 `
 
-@reduxForm({
-  // a unique name for the form
-  form: 'signup'
-})
 @graphql(SIGNUP_USER_MUTATION, { name: 'signupUser' })
 class Signup extends Component {
 
@@ -38,22 +35,29 @@ class Signup extends Component {
   }
 
   render() {
+    const errorLabel = <Label color="red" pointing />
+
     return (
       <ContainerFluid>
         <CardCenter header='Signup'>
           <Form>
-            <Form.Field>
-              <label>Email</label>
-              <input placeholder='Email' />
-            </Form.Field>
-            <Form.Field>
-              <label>Password</label>
-              <input placeholder='Password' />
-            </Form.Field>
-            <Form.Field>
-              <label>Password 2'nd time</label>
-              <input placeholder="Password 2'nd time" />
-            </Form.Field>
+            <Form.Input
+              name="email"
+              label="Email"
+              validations="isEmail"
+              validationErrors={{ isEmail: 'Email not valid' }}
+              errorLabel={ errorLabel }
+              required
+            />
+            <Form.Input
+              name="password"
+              label="Password"
+              validations="minLength:5"
+              validationErrors={{ minLength: 'Min 4 characters' }}
+              errorLabel={ errorLabel }
+              instantValidation
+              type="password"
+            />
             <Button type='submit' fluid positive>Register</Button>
           </Form>
         </CardCenter>
