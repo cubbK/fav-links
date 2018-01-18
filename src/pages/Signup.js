@@ -20,6 +20,12 @@ const SIGNUP_USER_MUTATION = gql`
 
 @graphql(SIGNUP_USER_MUTATION, { name: 'signupUser' })
 class Signup extends Component {
+  constructor () {
+    super()
+    this.state = {
+      isSubmitDisabled: true
+    }
+  }
 
   createUser = async (email, password) => {
 
@@ -34,13 +40,28 @@ class Signup extends Component {
 
   }
 
+  enableSubmitButton = () => {
+    this.setState({
+      isSubmitDisabled: false
+    })
+  }
+
+  disableSubmitButton = () => {
+    this.setState({
+      isSubmitDisabled: true
+    })
+  }
+
   render() {
     const errorLabel = <Label color="red" pointing />
 
     return (
       <ContainerFluid>
         <CardCenter header='Signup'>
-          <Form>
+          <Form
+            onValid={ this.enableSubmitButton }
+            onInvalid={ this.disableSubmitButton }
+          >
             <Form.Input
               name="email"
               label="Email"
@@ -57,8 +78,9 @@ class Signup extends Component {
               errorLabel={ errorLabel }
               instantValidation
               type="password"
+              required
             />
-            <Button type='submit' fluid positive>Register</Button>
+            <Button type='submit' fluid positive disabled={ this.state.isSubmitDisabled }>Register</Button>
           </Form>
         </CardCenter>
       </ContainerFluid>
