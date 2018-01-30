@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { graphql } from 'react-apollo'
+import { graphql, compose } from 'react-apollo'
 import gql from 'graphql-tag'
 
 import CardCenter from 'components/CardCenter'
@@ -9,7 +9,8 @@ import { Form, Input } from 'formsy-semantic-ui-react'
 
 import styles from './Signup.module.styl'
 
-const SIGNUP_USER_MUTATION = gql`
+
+const SIGNUP_USER = gql`
   mutation SignupUser($email: String!, $password: String!) {
     signupUser(email: $email, password: $password) {
       id
@@ -17,27 +18,50 @@ const SIGNUP_USER_MUTATION = gql`
     }
   }
 `
+const AUTH_USER = gql`
+  mutation authenticateUser($email: String!, $password: String!) {
+    authenticateUser(email: $email, password: $password) {
+      token
+    }
+  } 
+`
 
-@graphql(SIGNUP_USER_MUTATION, { name: 'signupUser' })
+@compose(
+  graphql(SIGNUP_USER, { name: 'signupUser' }),
+  graphql(AUTH_USER, { name: 'authUser' })
+)
 class Signup extends Component {
   constructor () {
     super()
     this.state = {
-      isSubmitDisabled: true
+      isSubmitDisabled: true,
+      error: null,
+      submitLoading: false
     }
   }
 
-  createUser = async (email, password) => {
+  createUser = async (model) => {
 
     try {
-      const response = await this.props.signupUser({ variables: { email, password } })
+      this.setState({
+        submitLoading: true
+      })
+      const response = await this.props.signupUser({ variables: { email: model.email, password: model.password } })
       localStorage.setItem('graphcoolToken', response.data.signupUser.token)
       this.props.history.push('/')
     } catch (e) {
-      console.error('An error occurred: ', e)
-      this.props.history.push('/')
+      console.log(e)
+      this.setState({
+        error: e,
+        submitLoading: false
+      })
+      
     }
 
+  }
+
+  createUserTest = (model, resetForm, invalidateForm) => {
+    console.log(model)
   }
 
   enableSubmitButton = () => {
@@ -61,6 +85,7 @@ class Signup extends Component {
           <Form
             onValid={ this.enableSubmitButton }
             onInvalid={ this.disableSubmitButton }
+            onValidSubmit = { this.createUser }
           >
             <Form.Input
               name="email"
@@ -80,8 +105,20 @@ class Signup extends Component {
               type="password"
               required
             />
-            <Button type='submit' fluid positive disabled={ this.state.isSubmitDisabled }>Register</Button>
+            <Button
+              type='submit' 
+              fluid 
+              positive 
+              disabled={ this.state.isSubmitDisabled }
+              loading={ this.state.submitLoading }
+            >
+              Register
+             </Button>
           </Form>
+          <div className={ styles.error }>
+            { this.state.error && this.state.error.toString() }
+          </div>
+          
         </CardCenter>
       </ContainerFluid>
     )
