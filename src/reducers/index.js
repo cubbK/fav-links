@@ -1,6 +1,6 @@
 import { combineReducers } from 'redux'
-import widgetDuck from './widgetDuck'
+import homeReducer from './homeReducer'
 
 export default combineReducers({
-   widgets: widgetDuck.reducer
+   home: homeReducer
 })
