@@ -4,6 +4,7 @@ import { graphql } from 'react-apollo'
 import { List, Input, Accordion, Icon } from 'semantic-ui-react'
 import { connect } from 'react-redux'
 import { setAccordionIndex } from 'actions/homeActions'
+import { map } from 'ramda'
 
 const isLogged = gql`
   query isLoggedIn {
@@ -29,38 +30,44 @@ class Home extends Component {
     this.props.setAccordionIndex(newIndex)
   }
 
-  render() {
+  getAccordionPiece = (value, i) => {
     const  { accordionActiveIndex }  = this.props
-    console.log(this.props)
+    console.log(value, i)
+    return[
+      <Accordion.Title active={accordionActiveIndex === 0} index={0} onClick={this.handleClick} key={value} >
+        <Icon name='dropdown' />
+        What is a dog?
+      </Accordion.Title> ,
+      <Accordion.Content active={accordionActiveIndex === 0} key={value + 'content'}>
+        content 1
+      </Accordion.Content>
+    ]
+  }
+
+  getAccordion = (arr) => {
+    return(
+      <Accordion styled fluid>
+        { map(this.getAccordionPiece, arr) }
+      </Accordion>
+    )
+  }
+
+  render() {
+    
+    
+    const testArr = [
+      'https://xkcd.com/1026/',
+      'https://xkcd.com/55/',
+      'https://github.com/cubbK?tab=stars',
+      'https://github.com/lllyasviel/style2paints',
+      'https://medium.com/@markguarino10/a-victim-centric-approach-to-fighting-sex-trafficking-in-chicago-a547c26314a3',
+      'https://dev-blog.apollodata.com/improved-apollo-client-devtools-eb43258f103f'
+    ]
 
     return (
       <div>
         <Input placeholder='Paste link' fluid size='massive' />
-        <Accordion styled fluid>
-          <Accordion.Title active={accordionActiveIndex === 0} index={0} onClick={this.handleClick}>
-            <Icon name='dropdown' />
-            What is a dog?
-        </Accordion.Title>
-          <Accordion.Content active={accordionActiveIndex === 0}>
-            content 1
-          </Accordion.Content>
-
-          <Accordion.Title active={accordionActiveIndex === 1} index={1} onClick={this.handleClick}>
-            <Icon name='dropdown' />
-            What kinds of dogs are there?
-        </Accordion.Title>
-          <Accordion.Content active={accordionActiveIndex === 1}>
-            content 1
-          </Accordion.Content>
-
-          <Accordion.Title active={accordionActiveIndex === 2} index={2} onClick={this.handleClick}>
-            <Icon name='dropdown' />
-            How do you acquire a dog?
-        </Accordion.Title>
-          <Accordion.Content active={accordionActiveIndex === 2}>
-            content 2
-          </Accordion.Content>
-        </Accordion>
+        { this.getAccordion(testArr) }
       </div>
     )
   }
